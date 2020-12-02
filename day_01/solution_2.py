@@ -1,7 +1,7 @@
 from pathlib import Path
 from itertools import islice
 
-from lib.io_operation import file_to_list
+from helper.python.io_operationlib.io_operation import file_to_list
 
 
 def find_three_sum(total_sum: int, numbers: list) -> int:

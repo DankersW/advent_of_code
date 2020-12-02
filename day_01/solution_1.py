@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from lib.io_operation import file_to_list
+from helper.python.io_operation import file_to_list
 
 
 def find_two_sum(total_sum: int, numbers: list) -> int:
