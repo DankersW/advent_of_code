@@ -25,7 +25,7 @@ int main()
 {
     std::ifstream file("input_example.txt");
     std::string line;
-    std::string passport = " ";
+    std::string passport = "";
     int valid_passport_counter = 0;
     while (std::getline(file, line))
     {
@@ -35,12 +35,11 @@ int main()
         }
         else
         {
-            std::cout << passport << std::endl;
             if (valid_passport(passport)) 
             { 
                 valid_passport_counter++; 
             }
-            passport = " ";
+            passport = "";
         }
     }
     std::cout << "Valid passwords counted: " << valid_passport_counter << std::endl;
