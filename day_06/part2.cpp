@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <bits/stdc++.h> 
+#include <algorithm>
 
 std::string get_unigue_str(const std::string &user_form)
 {
@@ -14,6 +15,7 @@ std::string get_unigue_str(const std::string &user_form)
 
 int count_shared_questions(const std::vector<std::string> &forms)
 {
+    int question_counter = 0;
     int group_size = forms.size();
     std::string all_form_questions = "";
     for(auto form: forms)
@@ -22,25 +24,22 @@ int count_shared_questions(const std::vector<std::string> &forms)
     }
     std::string all_unique_questions = get_unigue_str(all_form_questions);
 
-    /*
-    loop question in all_unique_questions:
-        if count_question_occurance(question) == size:
-            question_from_everyone++
-    return question_from_everyone
-    */
-    std::cout << "all questions: " << all_form_questions << "\t unigue q: " << all_unique_questions << "\t size: " << group_size << std::endl;
-    return -1;
+    for (auto letter: all_unique_questions)
+    {
+        auto letter_count = std::count(all_form_questions.begin(), all_form_questions.end(), letter);
+        if (letter_count == group_size){ question_counter++; }
+    }
+    return question_counter;
 }
 
 int main()
 {
     int question_count = 0;
-    std::ifstream file("input_example.txt");
+    std::ifstream file("input_test.txt");
     std::string line;
     std::vector<std::string> group_form;
     while (std::getline(file, line))
     {
-        std::cout << line << std::endl;
         if (line.compare("") != 0) { group_form.push_back(line); }
         else
         {
