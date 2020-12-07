@@ -3,44 +3,26 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
+#include <map>
 
-void translate_bag_to_node(std::vector<std::string> bags)
+
+std::string get_node(const std::string &entry)
 {
-    std::vector<std::string> nodes;
-    for (auto bag: bags)
-    {
-        if (std::find(nodes.begin(), nodes.end(), bag) == nodes.end())
-        {
-            std::cout << "new bag: " << bag << std::endl;
-            nodes.push_back(bag);
-        }
-
-    }
-
-
-    for (auto node: nodes)
-    {
-        std::cout << node << std::endl;
-    }
+    auto node_pos = entry.find(" bags ");
+    return entry.substr(0, node_pos);
 }
 
-void get_bag(std::string entry)
+std::vector<std::vector<std::string>> get_edges(const std::string &entry)
 {
-    std::cout << entry << std::endl;
-    
-    auto node_pos = entry.find(" bags ");
-    auto node = entry.substr(0, node_pos);
+    std::vector<std::vector<std::string>> edges;
 
-    std::cout << node << "\t" << std::endl;
-
-    std::vector<std::string> edges = {};
     if (entry.find(" no ") == std::string::npos)
     {
         auto contains_pos = entry.find("contain ");
         auto edge_pos = entry.find(" bag", contains_pos);
-
         auto weigth_edge_1 = entry.substr(contains_pos+8, 1);
         auto edge_1 = entry.substr(contains_pos+10, edge_pos-contains_pos-10);
+        edges.push_back({edge_1, weigth_edge_1});
 
         auto comma_pos = entry.find(", ");
         if (comma_pos != std::string::npos)
@@ -49,34 +31,77 @@ void get_bag(std::string entry)
             auto edge2_pos = entry.find(" bag", comma_pos);
 
             auto edge_2 = entry.substr(comma_pos+4, edge2_pos-comma_pos-4);
-            std::cout << weigth_edge_2 << "-   |" << edge_2 << "|" << std::endl;
+            edges.push_back({edge_2, weigth_edge_2});
         }
-
-
-        std::cout << edge_1 << " - " << weigth_edge_1 << std::endl;
+        else
+        {
+            edges.push_back({"-1", "-1"});
+        }
+        
     }
-    
+    else 
+    { 
+        edges.push_back({"-1", "-1"}); 
+        edges.push_back({"-1", "-1"});
+    }
+    return edges;
+}
 
-    
-    std::cout << std::endl;
+std::vector<std::string> color_to_id_translator(std::vector<std::string> &nodes)
+{
+    std::vector<std::string> map;
+    for (auto node: nodes)
+    {
+        if (std::find(map.begin(), map.end(), node) == map.end())
+        {
+            map.push_back(node);
+        }
+    }
+    for (auto _map: map)
+    {
+        std::cout << _map << std::endl;
+    }
 }
 
 int main()
 {
     std::ifstream file("input_example.txt");
     std::string line;
-    std::vector<std::string> raw_input;
+    std::vector<std::string> nodes = {};
     while (std::getline(file, line))
     {
-        //std::cout << line << std::endl;
-        raw_input.push_back(line);
-
-        //node
+        std::cout << line << std::endl;
+        std::string node = get_node(line);
+        std::vector<std::vector<std::string>> edges = get_edges(line);
+        if (std::find(nodes.begin(), nodes.end(), node) == nodes.end()) { nodes.push_back(node); }
+        std::cout << "node: " << node;
+        for (auto edge: edges)
+        {
+            std::cout << "\t edge: " << edge[0] << "~ " << edge[1];
+        }
+        std::cout << std::endl;
+    }
+    line.seekg(0);
+    while (std::getline(file, line))
+    {
+        std::cout << line << std::endl;
+        std::string node = get_node(line);
+        std::vector<std::vector<std::string>> edges = get_edges(line);
+        if (std::find(nodes.begin(), nodes.end(), node) == nodes.end()) { nodes.push_back(node); }
+        std::cout << "node: " << node;
+        for (auto edge: edges)
+        {
+            std::cout << "\t edge: " << edge[0] << "~ " << edge[1];
+        }
+        std::cout << std::endl;
     }
 
-    get_bag("light red bags contain 1 bright white bag, 2 muted yellow bags.");
-    get_bag("dotted black bags contain no other bags");
-    get_bag("bright white bags contain 1 shiny gold bag.");
+    for (auto node: nodes)
+    {
+        std::cout << node << std::endl;
+    }
 
+    //test_i();
+    
     return 0;
 }
