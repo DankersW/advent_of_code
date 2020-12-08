@@ -4,7 +4,10 @@
 #include <vector>
 #include <algorithm>
 #include <map>
-#include <bits/stdc++.h> 
+#include <bits/stdc++.h>
+#include <memory>
+
+#include "Graph.h" 
 
 
 std::string get_node(const std::string &entry)
@@ -39,31 +42,6 @@ std::pair<std::string, int> get_edge_2(const std::string &entry)
     else { return std::make_pair(std::string("NA"), -1); }
 }
 
-// To add an edge 
-void add_edge(std::vector<std::pair<int, int>> matrix[], int u, int v, int wt) 
-{ 
-    matrix[u].push_back(std::make_pair(v, wt)); 
-    matrix[v].push_back(std::make_pair(u, wt)); 
-}
-
-// Print adjacency list representaion ot graph 
-void printGraph(std::vector<std::pair<int,int>> adj[], int size) 
-{ 
-    int v, w; 
-    for (int u = 0; u < size; u++) 
-    { 
-        std::cout << "Node " << u << " makes an edge with" << std::endl; 
-        for (auto it = adj[u].begin(); it!=adj[u].end(); it++) 
-        { 
-            v = it->first; 
-            w = it->second; 
-            std::cout << "\tNode " << v << " with edge weight =" << w << std::endl; 
-        } 
-        std::cout << "\n"; 
-    } 
-}
-
-
 int main()
 {
     std::ifstream file("input_example.txt");
@@ -77,48 +55,53 @@ int main()
         raw_input.push_back(line);
     }
 
-
-    int matrix_size = nodes.size();   
-    std::vector<std::pair<int, int>> graph_matrix[matrix_size];
+    int graph_size = nodes.size();
+    auto graph = std::make_unique<Graph>(graph_size);
 
     for (auto &line: raw_input)
     {
         std::cout << line << std::endl;
 
         std::string node = get_node(line);
-        auto node_id = std::find(nodes.begin(), nodes.end(), node) - nodes.begin();
+        int node_id = std::find(nodes.begin(), nodes.end(), node) - nodes.begin();
         std::pair<std::string, int> edge_1 = get_edge_1(line);
         std::pair<std::string, int> edge_2 = get_edge_2(line);
 
         if (edge_1.first.compare("NA") != 0)
         {
-            auto edge1_id = std::find(nodes.begin(), nodes.end(), edge_1.first) - nodes.begin();
-            add_edge(graph_matrix, node_id, edge1_id, edge_1.second);
+            int edge1_id = std::find(nodes.begin(), nodes.end(), edge_1.first) - nodes.begin();
+            Edge edge = {node_id, edge1_id, edge_1.second};
+            graph->add_edge(edge);
         }
         if (edge_2.first.compare("NA") != 0)
         {
-            auto edge2_id = std::find(nodes.begin(), nodes.end(), edge_2.first) - nodes.begin();
-            add_edge(graph_matrix, node_id, edge2_id, edge_2.second);
+            int edge2_id = std::find(nodes.begin(), nodes.end(), edge_2.first) - nodes.begin();
+            Edge edge = {node_id, edge2_id, edge_2.second};
+            graph->add_edge(edge);
         }
             
 
         std::cout << "node: " << node_id << "\t edge1:" << edge_1.first << "  " << edge_1.second << "\t edge2:" << edge_2.first << "  " << edge_2.second << std::endl;
         std::cout << std::endl;
     }
+
+
     
     // construct a different graph: 
     // https://www.techiedelight.com/graph-implementation-using-stl/
 
 
 
-    for (size_t i = 0; i < matrix_size; i++)
+    for (size_t i = 0; i < graph_size; i++)
     {
         std::cout << i << ": " << nodes[i] << std::endl;
     }
 
     //test_i();
 
-    printGraph(graph_matrix, matrix_size);
+    graph->print_graph(graph_size);
+
+    graph->printAllPaths(2,4);
     
     return 0;
 }
