@@ -19,16 +19,10 @@ int execute_program(const std::vector<Instruction> &instructions)
         if (instructions[i].opp.compare("acc") == 0) { acc += instructions[i].arg; }
         else if (instructions[i].opp.compare("jmp") == 0){ i += instructions[i].arg -1; }
         
-        if (visited[i])
-        {
-            terminated = false;
-            break; 
-        }
+        if (visited[i]) { return -1; }
         else { visited[i] = 1; }
     }
-
-    if (terminated) { return acc; }
-    else { return -1; };
+    return acc;
 }
 
 int main()
