@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <map>
 #include <vector>
 
 struct Instruction
