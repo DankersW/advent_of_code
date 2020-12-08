@@ -36,11 +36,11 @@ int main()
     }
 
     auto acc = 0;
-    for (auto i=1; i<instructions.size(); i++)
+    for (auto i=0; i<instructions.size(); i++)
     {
         auto test_insts = instructions;
-        if (instructions[i+1].opp.compare("nop") == 0) { test_insts[i+1].opp = "jmp"; }
-        else if (instructions[i+1].opp.compare("jmp") == 0) { test_insts[i+1].opp = "nop"; }
+        if (instructions[i].opp.compare("nop") == 0) { test_insts[i].opp = "jmp"; }
+        else if (instructions[i].opp.compare("jmp") == 0) { test_insts[i].opp = "nop"; }
 
         acc = execute_program(test_insts);
         if (acc != -1) { break; }        
