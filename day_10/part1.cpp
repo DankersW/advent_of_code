@@ -34,7 +34,7 @@ int main()
     
 
     int diff_1_counter = 0;
-    int diff_3_counter = 0;
+    int diff_3_counter = 1;
     Adapter adapter = find_matching_adapter(adapters, 0);
     while (adapter.found)
     {
@@ -42,7 +42,6 @@ int main()
         else if (adapter.v_diff == 3) { diff_3_counter++; }
         adapter = find_matching_adapter(adapters, adapter.voltage);
     }
-    diff_3_counter++;
 
     std::cout << "Joint diff: " << diff_3_counter*diff_1_counter <<std::endl;
 }

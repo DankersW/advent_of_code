@@ -4,69 +4,42 @@
 #include <vector>
 #include <bits/stdc++.h>
 
-struct Adapter{
-    bool found;
-    int base_voltage;
-    int voltage;
-    int v_diff;
-};
 
-Adapter find_matching_adapter(const std::vector<int> &adapters, const int &voltage)
+std::vector<int> adapters;
+long int path_memory[100] = {0};
+
+long int count_path(int i)
 {
-    //std::cout << "voltage: " << voltage << std::endl;
-    for(auto adapter: adapters)
+    if (i == adapters.size() - 1)
     {
-        //std::cout << "adapter: " << adapter << std::endl;
-        if (voltage + 1 == adapter)
-        {
-            return {true, voltage, adapter, adapter-voltage};
-        }
-        else if (voltage + 2 == adapter)
-        {
-            return {true, voltage, adapter, adapter-voltage};
-        }
-        else if (voltage + 3 == adapter)
-        {
-            return {true, voltage, adapter, adapter-voltage};
-        }
+        return 1;
     }
-    return {false, voltage, voltage, voltage-voltage};
+
+    // check memory
+    if (path_memory[i] != 0) { return path_memory[i]; }
+
+    long int path_counter = 0;
+    for (int j = i+1; j<adapters.size(); ++j)
+    {
+        if (adapters[j] - adapters[i] <= 3) { path_counter += count_path(j); }
+    }
+
+    path_memory[i] = path_counter;
+    return path_counter;
 }
 
 int main()
 {
-    std::vector<int> adapters;
     std::ifstream file("input_test.txt");
     std::string line;
     while (std::getline(file, line))
     {
-        std::cout << line << std::endl;
         adapters.push_back(std::stoi(line));
     }
+    adapters.push_back(0);
     std::sort(adapters.begin(), adapters.end());
-    
 
-    int diff_1_counter = 0;
-    int diff_3_counter = 0;
-    int starting_voltage = 0;
-    Adapter adapter = find_matching_adapter(adapters, starting_voltage);
-    while (adapter.found)
-    {
-        std::cout << "for voltage: " << adapter.base_voltage << " found adapter: " << adapter.voltage << "\t diff: " << adapter.v_diff << std::endl;
-        if (adapter.v_diff == 1)
-        {
-            diff_1_counter++;
-        }
-        else if (adapter.v_diff == 3)
-        {
-            diff_3_counter++;
-        }
+    long int path_counter = count_path(0);
 
-        adapter = find_matching_adapter(adapters, adapter.voltage);
-    }
-    diff_3_counter++;
-
-    std::cout << "diff 1: " << diff_1_counter << " diff 3: " << diff_3_counter << std::endl;
-
-    std::cout << "Joint diff: " << diff_3_counter*diff_1_counter <<std::endl;
+    std::cout << "Possible paths: " << path_counter << std::endl;
 }
