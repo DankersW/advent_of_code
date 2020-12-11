@@ -30,11 +30,11 @@ int main()
 
     std::vector<std::string> intereting_colors = {"shiny gold"};
     int bag_counter = 0;
-    for (auto it = raw_input.rbegin(); it != raw_input.rend(); ++it)
+    for(auto entry: raw_input)
     {
-        std::string entry = *it;
         if (good_bag_color(intereting_colors, entry))
         {
+            std::cout << entry << std::endl;
             std::string parent_bag = entry.substr(0, entry.find(" bags"));
             if (std::find(intereting_colors.begin(), intereting_colors.end(), parent_bag) == intereting_colors.end())
             {
