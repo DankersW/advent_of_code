@@ -3,6 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <bits/stdc++.h>
+#include <chrono>
 
 
 std::vector<int> adapters;
@@ -39,7 +40,12 @@ int main()
     adapters.push_back(0);
     std::sort(adapters.begin(), adapters.end());
 
+    auto start_time = std::chrono::high_resolution_clock::now();
     long int path_counter = count_path(0);
+    auto stop_time = std::chrono::high_resolution_clock::now();
+
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop_time - start_time).count();
 
     std::cout << "Possible paths: " << path_counter << std::endl;
+    std::cout << "time: " << duration << " micro-seconds" << std::endl;
 }
