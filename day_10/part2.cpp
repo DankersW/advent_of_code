@@ -11,12 +11,8 @@ long int path_memory[100] = {0};
 
 long int count_path(int i)
 {
-    if (i == adapters.size() - 1)
-    {
-        return 1;
-    }
+    if (i == adapters.size() - 1) { return 1; }
 
-    // check memory
     if (path_memory[i] != 0) { return path_memory[i]; }
 
     long int path_counter = 0;
@@ -38,9 +34,9 @@ int main()
         adapters.push_back(std::stoi(line));
     }
     adapters.push_back(0);
-    std::sort(adapters.begin(), adapters.end());
 
     auto start_time = std::chrono::high_resolution_clock::now();
+    std::sort(adapters.begin(), adapters.end());
     long int path_counter = count_path(0);
     auto stop_time = std::chrono::high_resolution_clock::now();
 
