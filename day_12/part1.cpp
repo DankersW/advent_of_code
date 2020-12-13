@@ -1,14 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <vector>
 #include <algorithm>
-
-struct Instruction
-{
-    char action;
-    int value;
-};
 
 int get_direction_index_left(int jump, int index)
 {
@@ -34,35 +27,27 @@ char calc_direction(const char &starting_direction, const char &heading, int tur
     return directions[direction_index];
 }
 
-int calc_manhatten_dist(const std::vector<Instruction> &instructions, char starting_direction = 'E')
+int main()
 {
     int east_counter = 0;
     int north_counter = 0;
+    char direction = 'E';
 
-    char direction = starting_direction;
-
-    for (auto instr: instructions)
-    {
-        if (instr.action == 'N' || (instr.action == 'F' && direction == 'N')) { north_counter += instr.value; }
-        else if (instr.action == 'S' || (instr.action == 'F' && direction == 'S')) { north_counter -= instr.value; }
-        else if (instr.action == 'E' || (instr.action == 'F' && direction == 'E')) { east_counter += instr.value; }
-        else if (instr.action == 'W' || (instr.action == 'F' && direction == 'W')) { east_counter -= instr.value; }
-        else if (instr.action == 'L' || instr.action == 'R') { direction = calc_direction(direction, instr.action, instr.value); }
-    }
-    return abs(north_counter) + abs(east_counter);
-}
-
-int main()
-{
-    std::vector<Instruction> instructions;
     std::ifstream file("input_test.txt");
     std::string line;
     while (std::getline(file, line))
     {
-        instructions.push_back({line[0], std::stoi(line.substr(1))});
+        char action = line[0];
+        int value = std::stoi(line.substr(1));
+
+        if (action == 'N' || (action == 'F' && direction == 'N')) { north_counter += value; }
+        else if (action == 'S' || (action == 'F' && direction == 'S')) { north_counter -= value; }
+        else if (action == 'E' || (action == 'F' && direction == 'E')) { east_counter += value; }
+        else if (action == 'W' || (action == 'F' && direction == 'W')) { east_counter -= value; }
+        else if (action == 'L' || action == 'R') { direction = calc_direction(direction, action, value); }
     }
 
-    int distance = calc_manhatten_dist(instructions);
+    int distance =  abs(north_counter) + abs(east_counter);
     std::cout << "manhatten distance: " << distance << std::endl;
 
     return 0;
