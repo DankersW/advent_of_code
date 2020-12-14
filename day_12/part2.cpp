@@ -39,7 +39,7 @@ int main()
     Location ship_loc = {0,0};
     Location waypoint = {1,10};
 
-    std::cout << "ship N: " << ship_loc.north << " E: " << ship_loc.east << "\t way N: " << waypoint.north << " E: " << ship_loc.east << std::endl;
+    std::cout << "ship N: " << ship_loc.north << " E: " << ship_loc.east << "\t way N: " << waypoint.north << " E: " << waypoint.east << std::endl;
 
 
     std::ifstream file("input_example.txt");
@@ -69,7 +69,14 @@ int main()
             ship_loc.east += waypoint.east * value;
         }
 
-        std::cout << "ship N: " << ship_loc.north << " E: " << ship_loc.east << "\t way N: " << waypoint.north << " E: " << ship_loc.east << std::endl;
+        else if (action == 'L' || action == 'R'){
+            //direction = calc_direction(direction, action, value);
+        }
+
+
+
+
+        std::cout <<  " --> ship N: " << ship_loc.north << " E: " << ship_loc.east << "\t way N: " << waypoint.north << " E: " << waypoint.east << std::endl;
 
         //if (action == 'N' || (action == 'F' && direction == 'N')) { north_counter += value; }
 
@@ -80,8 +87,9 @@ int main()
         //else if (action == 'L' || action == 'R') { direction = calc_direction(direction, action, value); }
     }
 
-    //int distance =  abs(north_counter) + abs(east_counter);
-    //std::cout << "manhatten distance: " << distance << std::endl;
+
+    int distance = abs(ship_loc.north) + abs(ship_loc.east);
+    std::cout << "manhatten distance: " << distance << std::endl;
 
     return 0;
 }
