@@ -8,31 +8,24 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func commander(cmd string) (int, int) {
-	s := strings.Split(cmd, " ")
-	force, _ := strconv.Atoi(s[1])
-	if s[0] == "forward" {
-		return force, 0
-	} else if s[0] == "down" {
-		return 0, force
-	} else if s[0] == "up" {
-		return 0, force * -1
-	}
-	log.Error("failed return")
-	return 0, 0
-}
-
 func part2() {
-	content, _ := ioutil.ReadFile("sample.txt")
+	content, _ := ioutil.ReadFile("data.txt")
 	lines := strings.Split(string(content), "\n")
 	//log.Info(lines)
 
-	depth, hor := 0, 0
+	depth, hor, aim := 0, 0, 0
 	for _, line := range lines {
-		//log.Info(line)
-		posH, posD := commander(line)
-		depth = depth + posD
-		hor = hor + posH
+		cmd := strings.Split(line, " ")
+		force, _ := strconv.Atoi(cmd[1])
+
+		if cmd[0] == "down" {
+			aim = aim + force
+		} else if cmd[0] == "up" {
+			aim = aim - force
+		} else if cmd[0] == "forward" {
+			hor = hor + force
+			depth = depth + (aim * force)
+		}
 	}
 	log.Infof("hor: %d", hor)
 	log.Infof("dep: %d", depth)
