@@ -5,6 +5,8 @@ __pycache__/
 .idea/
 .vscode/
 
+2021/day_*/day_*
+
 # C extensions
 *.so
 
